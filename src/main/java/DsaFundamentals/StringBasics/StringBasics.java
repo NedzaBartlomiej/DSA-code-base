@@ -1,7 +1,13 @@
 package DsaFundamentals.StringBasics;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class StringBasics {
     public static void main(String[] args) {
+        StringBuilder stringBuilder = new StringBuilder();
+
         // Print ASCII value of each character in a string.
         System.out.println("1.");
 
@@ -73,5 +79,111 @@ public class StringBasics {
         System.out.println();
 
         System.out.println("4.");
+
+
+        // Remove leading, trailing, and extra spaces in a string.
+        System.out.println("5.");
+        stringBuilder.setLength(0);
+
+        String s5 = " St ring ";
+
+        for (char c : s5.toCharArray()) {
+            if (c != 32) {
+                stringBuilder.append(c);
+            }
+        }
+        System.out.println(stringBuilder);
+
+        System.out.println("5.");
+
+
+        // Find the maximum and minimum occurring characters in a string.
+        System.out.println("6.");
+
+        String s6 = "SSttriigg";
+        int[] occurrencesByAscii = new int[128];
+        for (char c : s6.toCharArray()) {
+            occurrencesByAscii[c]++;
+        }
+        int maxOcc = 0, minOcc = Integer.MAX_VALUE;
+        char maxChar = '\0', minChar = '\0';
+        for (int i = 0; i < occurrencesByAscii.length; i++) {
+            int currOcc = occurrencesByAscii[i];
+            char currChar = (char) i;
+            if (currOcc <= 0) continue;
+            if (currOcc > maxOcc) {
+                maxOcc = currOcc;
+                maxChar = currChar;
+            }
+            if (currOcc < minOcc) {
+                minOcc = currOcc;
+                minChar = currChar;
+            }
+        }
+        System.out.println("minChar = " + minChar);
+        System.out.println("maxChar = " + maxChar);
+
+        System.out.println("6.");
+
+
+        // Check if there are two or three consecutive identical characters in a string.
+        System.out.println("7.");
+
+        String s7 = "=iiing";
+        int streak = 1;
+        for (int i = 1; i < s7.length(); i++) {
+            if (s7.charAt(i) == s7.charAt(i - 1)) {
+                streak++;
+                continue;
+            }
+            if (streak == 2 || streak == 3) break;
+            if (s7.charAt(i) != s7.charAt(i - 1)) streak = 1;
+        }
+        System.out.println(streak == 2 || streak == 3);
+
+        System.out.println("7.");
+
+
+        // Find the first and last index of occurrence for each character in a string.
+        System.out.println("8.");
+        String s8 = "abccba";
+        int[] firstOcc = new int[128];
+        int[] lastOcc = new int[128];
+        Arrays.fill(firstOcc, s8.length());
+        Arrays.fill(lastOcc, -1);
+
+        for (int i = 0; i < s8.length(); i++) {
+            if (i < firstOcc[s8.charAt(i)]) firstOcc[s8.charAt(i)] = i;
+            if (i > lastOcc[s8.charAt(i)]) lastOcc[s8.charAt(i)] = i;
+        }
+
+        for (int i = 0; i < 128; i++) {
+            if (firstOcc[i] == s8.length() && lastOcc[i] == -1) continue;
+            System.out.println("char = " + (char) i + ", firstOcc = " + firstOcc[i] + ", lastOcc = " + lastOcc[i]);
+        }
+
+        System.out.println("8.");
+
+
+        // Check if a string contains all letters from 'a' to 'z'.
+        System.out.println("9.");
+
+        String s9 = "qwertyuiopasdfghjklzxcvbnm";
+        System.out.println(checkIfAStringContainsAllLettersFromAToZ(s9));
+        System.out.println("9.");
+    }
+
+    private static boolean checkIfAStringContainsAllLettersFromAToZ(final String s) {
+        final short ALPHABET_LENGTH = 26;
+        if (s.length() < ALPHABET_LENGTH) return false;
+        Set<Character> letters = new HashSet<>(ALPHABET_LENGTH);
+        for (char c : s.toCharArray()) {
+            if (Character.isLetter(c)) {
+                letters.add(Character.toLowerCase(c));
+            }
+            if (letters.size() == ALPHABET_LENGTH) return true;
+        }
+        System.out.println(letters);
+        return false;
     }
 }
