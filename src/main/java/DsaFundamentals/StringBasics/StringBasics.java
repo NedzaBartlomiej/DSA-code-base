@@ -1,8 +1,6 @@
 package DsaFundamentals.StringBasics;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class StringBasics {
     public static void main(String[] args) {
@@ -171,9 +169,15 @@ public class StringBasics {
         String s9 = "qwertyuiopasdfghjklzxcvbnm";
         System.out.println(checkIfAStringContainsAllLettersFromAToZ(s9));
         System.out.println("9.");
+
+
+        System.out.println(findASpecificSubstringWithinAString("strfyifyingi555", "555"));
+
+        System.out.println(generateAllPossibleSubstringsOfAString("abc"));
     }
 
-    private static boolean checkIfAStringContainsAllLettersFromAToZ(final String s) {
+    // 9.
+    private static boolean checkIfAStringContainsAllLettersFromAToZ(String s) {
         final short ALPHABET_LENGTH = 26;
         if (s.length() < ALPHABET_LENGTH) return false;
         Set<Character> letters = new HashSet<>(ALPHABET_LENGTH);
@@ -185,5 +189,35 @@ public class StringBasics {
         }
         System.out.println(letters);
         return false;
+    }
+
+    // 10.
+    // the function is compatible with the new String().substring(start, end) method.
+    private static String findASpecificSubstringWithinAString(String s, String substring) {
+        if (s.length() < substring.length()) return "The string does not contains the substring.";
+        for (int i = 0, j = 0; i < s.length() && j < substring.length(); i++) {
+            if (s.charAt(i) != substring.charAt(j)) j = 0;
+            if (s.charAt(i) == substring.charAt(j)) j++;
+            if (j == substring.length())
+                return "The string contains substring at: {start:" + (i + 1 - substring.length()) + ", end:" + (i + 1) + "}";
+        }
+        return "The string does not contains the substring.";
+    }
+
+    // 11.
+    // Using .substring(start, end) there are created new string for each substring -> so n^2 new strings,
+    // Using StringBuilder
+    // we have string only for each i iteration so n strings for generating substrings instead of n^2
+    private static List<String> generateAllPossibleSubstringsOfAString(String s) {
+        int n = s.length();
+        List<String> substrings = new ArrayList<>(n * (n + 1) / 2);
+        for (int i = 0; i < n; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = i; j < n; j++) {
+                sb.append(s.charAt(j));
+                substrings.add(sb.toString());
+            }
+        }
+        return substrings;
     }
 }
