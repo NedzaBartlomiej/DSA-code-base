@@ -191,8 +191,42 @@ public class MatrixBasics {
         System.out.println(Arrays.toString(right));
     }
 
-    // 9. todo with clear mind
+    // 9.
     private static void printAllDiagonalsFromTopLeftToBottomRight(int[][] mat) {
+        int n = mat.length;
+        int[][] diagonals = new int[n * 2 - 1][];
+        int diagonalIdx = 0;
 
+        for (int i = n - 1; i >= 0; i--) {
+            int row = i, col = 0;
+            diagonals[diagonalIdx] = new int[n - i];
+            int diagonalValIdx = 0;
+            while (row < n && col < n) {
+                diagonals[diagonalIdx][diagonalValIdx] = mat[row][col];
+                System.out.print(mat[row][col] + ",");
+                row++;
+                col++;
+                diagonalValIdx++;
+            }
+            diagonalIdx++;
+            System.out.println();
+        }
+
+        for (int i = 1; i < n; i++) {
+            int col = i, row = 0;
+            diagonals[diagonalIdx] = new int[n - i];
+            int diagonalValIdx = 0;
+            while (col < n && row < n) {
+                diagonals[diagonalIdx][diagonalValIdx] = mat[row][col];
+                System.out.print(mat[row][col] + ",");
+                col++;
+                row++;
+                diagonalValIdx++;
+            }
+            diagonalIdx++;
+            System.out.println();
+        }
+
+        System.out.println(Arrays.deepToString(diagonals));
     }
 }
