@@ -45,6 +45,27 @@ public class MatrixBasics {
 
         // 9.
         printAllDiagonalsFromTopLeftToBottomRight(matrixA);
+
+        // 10.
+        int[][] unsortedMatrix = {
+                {3, 4, 2},
+                {5, 7, 2},
+                {8, 1, 6}
+        };
+        int[][] unsortedMatrix2 = {
+                {3, 4, 2},
+                {5, 7, 2},
+                {8, 1, 6}
+        };
+        sortTheMatrixRowWiseAndColumnWise(unsortedMatrix, unsortedMatrix2);
+
+        // 11.
+        int[][] matrix = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        };
+        printTheMatrixInAZigZagPattern(matrix);
     }
 
     // 1.
@@ -228,5 +249,44 @@ public class MatrixBasics {
         }
 
         System.out.println(Arrays.deepToString(diagonals));
+    }
+
+    // 10.
+    private static void sortTheMatrixRowWiseAndColumnWise(int[][] mat1, int[][] mat2) {
+        // row-wise
+        System.out.println("Unsorted: " + Arrays.deepToString(mat1));
+        for (int i = 0; i < mat1.length; i++) {
+            int[] row = mat1[i];
+            for (int j = 0; j < row.length; j++) {
+                for (int k = 0; k < row.length - k; k++) {
+                    if (row[k] > row[k + 1]) swap(row, k, k + 1);
+                }
+            }
+        }
+        System.out.println("Sorted: " + Arrays.deepToString(mat1));
+        // col-wise
+        System.out.println("Unsorted: " + Arrays.deepToString(mat2));
+        for (int i = 0; i < mat2[0].length; i++) {
+            for (int j = 0; j < mat2.length; j++) {
+                for (int k = 0; k < mat2.length - k; k++) {
+                    if (mat2[k][i] > mat2[k + 1][i]) {
+                        int temp = mat2[k + 1][i];
+                        mat2[k + 1][i] = mat2[k][i];
+                        mat2[k][i] = temp;
+                    }
+                }
+            }
+        }
+        System.out.println("Sorted: " + Arrays.deepToString(mat2));
+    }
+
+    private static void swap(int[] arr, int swapper, int swapping) {
+        int temp = arr[swapping];
+        arr[swapping] = arr[swapper];
+        arr[swapper] = temp;
+    }
+
+    private static void printTheMatrixInAZigZagPattern(int[][] mat) {
+
     }
 }
