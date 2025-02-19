@@ -1,6 +1,8 @@
 package DsaFundamentals.MatrixBasics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MatrixBasics {
     public static void main(String[] args) {
@@ -61,11 +63,29 @@ public class MatrixBasics {
 
         // 11.
         int[][] matrix = {
-                {1, 2, 3},
-                {4, 5, 6},
-                {7, 8, 9}
+                {1, 2, 3, 4, 5},
+                {6, 7, 8, 9, 10},
+                {11, 12, 13, 14, 15},
+                {16, 17, 18, 19, 20},
+                {21, 22, 23, 24, 25}
         };
         printTheMatrixInAZigZagPattern(matrix);
+
+        int[][] symmetric = {
+                {1, 2, 33},
+                {2, 4, 5},
+                {3, 5, 6}
+        };
+        checkIfAMatrixIsSymmetric(symmetric);
+
+        int[][] identity = {
+                {1, 0},
+                {0, 0, 0},
+                {1, 0, 1}
+        };
+        System.out.println(checkIfAMatrixIsAnIdentityMatrix(identity));
+
+        System.out.println(checkIfAMatrixIsSparseMostlyZeroes(identity));
     }
 
     // 1.
@@ -287,6 +307,79 @@ public class MatrixBasics {
     }
 
     private static void printTheMatrixInAZigZagPattern(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        List<Integer> result = new ArrayList<>(n * m);
+        int row = 0;
+        int col = 0;
+        boolean upwards = true;
+        while (result.size() < n * m) {
+            result.add(mat[row][col]);
 
+            if (upwards) { // upwards diagonal moving
+                if (row == 0 && col < m - 1) {
+                    col++;
+                    upwards = false;
+                } else if (col == m - 1) {
+                    row++;
+                    upwards = false;
+                } else {
+                    col++;
+                    row--;
+                }
+            } else { // downwards diagonal moving
+                if (row == n - 1 && col > 0) {
+                    col++;
+                    upwards = true;
+                } else if (col == 0) {
+                    row++;
+                    upwards = true;
+                } else {
+                    col--;
+                    row++;
+                }
+            }
+        }
+        System.out.println(result);
     }
+
+    private static void checkIfAMatrixIsSymmetric(int[][] mat) {
+        boolean symmetric = true;
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[i].length; j++) {
+                if (mat[i][j] != mat[j][i]) {
+                    symmetric = false;
+                    break;
+                }
+            }
+        }
+        System.out.println(symmetric);
+    }
+
+    private static boolean checkIfAMatrixIsAnIdentityMatrix(int[][] mat) {
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[i].length; j++) {
+                int curr = mat[i][j];
+                if (j == i && curr != 1) return false;
+                else if (j != i && curr != 0) return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean checkIfAMatrixIsSparseMostlyZeroes(int[][] mat) {
+        int zeroCounter = 0;
+        int notZeroCounter = 0;
+        for (int[] row : mat) {
+            for (int col = 0; col < mat[0].length; col++) {
+                int curr = row[col];
+                if (curr == 0) zeroCounter++;
+                else notZeroCounter++;
+            }
+        }
+        return zeroCounter > notZeroCounter;
+    }
+
+    // todo - SOMETIME IN THE FUTURE - when I'll be able to do this -> "Find the inverse of a matrix."
+    //  AND follow the site, cause maybe a some development of this topic will be written
 }
