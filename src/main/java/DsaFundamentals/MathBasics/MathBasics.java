@@ -32,6 +32,15 @@ public class MathBasics {
 
         // 9.
         calculateTheLcmAndGcdOfTwoNumbers(36, 27);
+
+        // 10.
+        System.out.println(checkIfANumberIsPrimeWithoutUsingTheSieveOfEratosthenes(8));
+
+        // 11.
+        System.out.println(checkIfTwoNumbersAreCoPrime(8, 15));
+
+        // 12.
+        findAllDivisorsOfAGivenNumber(8);
     }
 
     // 1.
@@ -171,5 +180,34 @@ public class MathBasics {
         // lcm without iteration - with the gcd formula
         int lcm = n1 * n2 / a1; // a1 is just some NWD one of the above
         System.out.println("lcm with the gcd formula = " + lcm);
+    }
+
+    private static boolean checkIfANumberIsPrimeWithoutUsingTheSieveOfEratosthenes(int num) {
+        if (num < 2) return false;
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) return false;
+        }
+        return true;
+    }
+
+    private static boolean checkIfTwoNumbersAreCoPrime(int n1, int n2) {
+        int a = Math.max(n1, n2), b = Math.min(n1, n2);
+        while (b != 0) {
+            int aSave = a;
+            a = b;
+            b = aSave % b;
+        }
+        return a == 1;
+    }
+
+    private static void findAllDivisorsOfAGivenNumber(int n) {
+        for (int i = 1; i * i <= n; i++) {
+            if (n % i == 0) {
+                System.out.print(i);
+                System.out.print(",");
+                if (i != n / i) System.out.print(n / i);
+                System.out.print(",");
+            }
+        }
     }
 }
