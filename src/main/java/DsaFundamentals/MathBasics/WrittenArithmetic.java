@@ -5,16 +5,35 @@ import java.math.BigInteger;
 public class WrittenArithmetic {
     public static void main(String[] args) {
 
-        System.out.println(writtenAddition("186", "26"));
+        System.out.println(writtenAddition("-0000022", "-00342"));
 
-        System.out.println(writtenSubtraction("1", "2"));
+        System.out.println(writtenSubtraction("0342", "01"));
+
+        System.out.println(writtenMultiplication("10", "22"));
     }
 
-    // todo - written addition, written subtraction, written division,
-    //  written multiplication (for integers) + (for doubles)\
-    // todo - improve algorithms for signed numbers (-)
+    // todo - written division,
+    //  written multiplication (for integers) + (for doubles)
 
     private static String writtenAddition(String n1, String n2) {
+
+        // cases handling/data preparation
+        boolean signedResult = false;
+        BigInteger n1BI = new BigInteger(n1);
+        BigInteger n2BI = new BigInteger(n2);
+        String absSmaller = n1BI.min(n2BI).toString();
+        String absLarger = n1BI.max(n2BI).toString();
+
+        if (n1.startsWith("-") && n2.startsWith("-")) {
+            n1 = n1.substring(1);
+            n2 = n2.substring(1);
+            signedResult = true;
+        } else if (absSmaller.startsWith("-")) {
+            absSmaller = absSmaller.substring(1);
+            return writtenSubtraction(absLarger, absSmaller);
+        }
+
+        // addition
         int n = n1.length() - 1;
         int m = n2.length() - 1;
         int carry = 0;
@@ -30,22 +49,44 @@ public class WrittenArithmetic {
             n--;
             m--;
         }
+
+        // finishing the result
+        if (signedResult) result.append("-");
+        result.reverse();
+        for (int i = result.charAt(0) == '-' ? 1 : 0; i < result.length(); ) {
+            if (result.charAt(i) == '0') result.deleteCharAt(i);
+            else break;
+        }
+
         return result.toString();
     }
 
-    /**
-     * function formula is n1 - n2;
-     */
     private static String writtenSubtraction(String minuend, String subtrahend) {
         if (minuend.equals(subtrahend)) return "0";
 
-        boolean negative = new BigInteger(minuend).compareTo(new BigInteger(subtrahend)) < 0;
-        if (negative) {
+        // cases handling/data preparation
+        if (minuend.startsWith("-") && subtrahend.startsWith("-")) {
+            minuend = minuend.substring(1);
+            subtrahend = subtrahend.substring(1);
+            String minuendSave = minuend;
+            minuend = subtrahend;
+            subtrahend = minuendSave;
+        } else if (minuend.startsWith("-")) {
+            subtrahend = "-" + subtrahend;
+            return writtenAddition(minuend, subtrahend);
+        } else if (subtrahend.startsWith("-")) {
+            subtrahend = subtrahend.substring(1);
+            return writtenAddition(minuend, subtrahend);
+        }
+
+        boolean negativeMinuend = new BigInteger(minuend).compareTo(new BigInteger(subtrahend)) < 0;
+        if (negativeMinuend) {
             String minuendSave = minuend;
             minuend = subtrahend;
             subtrahend = minuendSave;
         }
 
+        // subtraction
         int minuendIdx = minuend.length() - 1;
         int subtrahendIdx = subtrahend.length() - 1;
         int loan = 0;
@@ -68,13 +109,19 @@ public class WrittenArithmetic {
             subtrahendIdx--;
         }
 
-        if (negative) result.append("-");
+        // finishing the result
+        if (negativeMinuend) result.append("-");
         result.reverse();
-        for (int i = 0; i < result.length(); i++) {
+        for (int i = result.charAt(0) == '-' ? 1 : 0; i < result.length(); ) {
             if (result.charAt(i) == '0') result.deleteCharAt(i);
             else break;
         }
 
         return result.toString();
+    }
+
+    private static String writtenMultiplication(String n1, String n2) {
+        if (n1.matches("0+") || n2.matches("0+")) return "0";
+        // TIP: addition immediately after multiplication of two digits
     }
 }
