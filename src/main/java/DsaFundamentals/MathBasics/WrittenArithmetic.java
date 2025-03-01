@@ -9,11 +9,11 @@ public class WrittenArithmetic {
 
         System.out.println(writtenSubtraction("0342", "01"));
 
-        System.out.println(writtenMultiplication("10", "22"));
+        System.out.println(writtenMultiplication("23", "77"));
     }
 
-    // todo - written division,
-    //  written multiplication (for integers) + (for doubles)
+    // todo - writtenDivision(longDivision)
+    //  implementation for FLOAT
 
     private static String writtenAddition(String n1, String n2) {
 
@@ -24,11 +24,11 @@ public class WrittenArithmetic {
         String absSmaller = n1BI.min(n2BI).toString();
         String absLarger = n1BI.max(n2BI).toString();
 
-        if (n1.startsWith("-") && n2.startsWith("-")) {
+        if (n1.charAt(0) == '-' && n2.charAt(0) == '-') {
             n1 = n1.substring(1);
             n2 = n2.substring(1);
             signedResult = true;
-        } else if (absSmaller.startsWith("-")) {
+        } else if (absSmaller.charAt(0) == '-') {
             absSmaller = absSmaller.substring(1);
             return writtenSubtraction(absLarger, absSmaller);
         }
@@ -65,16 +65,16 @@ public class WrittenArithmetic {
         if (minuend.equals(subtrahend)) return "0";
 
         // cases handling/data preparation
-        if (minuend.startsWith("-") && subtrahend.startsWith("-")) {
+        if (minuend.charAt(0) == '-' && subtrahend.charAt(0) == '-') {
             minuend = minuend.substring(1);
             subtrahend = subtrahend.substring(1);
             String minuendSave = minuend;
             minuend = subtrahend;
             subtrahend = minuendSave;
-        } else if (minuend.startsWith("-")) {
+        } else if (minuend.charAt(0) == '-') {
             subtrahend = "-" + subtrahend;
             return writtenAddition(minuend, subtrahend);
-        } else if (subtrahend.startsWith("-")) {
+        } else if (subtrahend.charAt(0) == '-') {
             subtrahend = subtrahend.substring(1);
             return writtenAddition(minuend, subtrahend);
         }
@@ -122,6 +122,50 @@ public class WrittenArithmetic {
 
     private static String writtenMultiplication(String n1, String n2) {
         if (n1.matches("0+") || n2.matches("0+")) return "0";
-        // TIP: addition immediately after multiplication of two digits
+
+        // cases handling/data preparation
+        boolean signed = false;
+        if (n1.charAt(0) == '-' && n2.charAt(0) == '-') {
+            n1 = n1.substring(1);
+            n2 = n2.substring(1);
+        } else if (n1.charAt(0) == '-') {
+            n1 = n1.substring(1);
+            signed = true;
+        } else if (n2.charAt(0) == '-') {
+            n2 = n2.substring(1);
+            signed = true;
+        }
+
+        // multiplication
+        int n1Len = n1.length();
+        int n2Len = n2.length();
+        int[] mplResult = new int[n1Len + n2Len]; // an array with the decimal positions of the result
+        for (int i = n1Len - 1; i >= 0; i--) {
+            int n1Digit = n1.charAt(i) - '0';
+            for (int j = n2Len - 1; j >= 0; j--) {
+                int n2Digit = n2.charAt(j) - '0';
+                int currNumDecPos = i + j + 1; // curr decimal positions of the result
+                int product = n1Digit * n2Digit;
+                mplResult[currNumDecPos] += product % 10; // set the curr decimal position result
+                mplResult[currNumDecPos - 1] += product / 10; // update the next carry
+            }
+        }
+
+        // finishing the result
+        StringBuilder result = new StringBuilder();
+        boolean numSeen = false;
+        for (int n : mplResult) {
+            if (n == 0 && !numSeen) continue;
+            numSeen = true;
+            result.append(n);
+        }
+        if (signed) result.insert(0, "-");
+
+        return result.toString();
+    }
+
+
+    private static String writtenDivision(String dividend, String divisor) {
+
     }
 }
