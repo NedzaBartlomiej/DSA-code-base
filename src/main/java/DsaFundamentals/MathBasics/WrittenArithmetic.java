@@ -7,18 +7,19 @@ public class WrittenArithmetic {
 
         System.out.println(writtenAddition("-0000022", "-00342"));
 
-        System.out.println(writtenSubtraction("0342", "01"));
+        System.out.println(writtenSubtraction("034", "01"));
 
-        System.out.println(writtenMultiplication("23", "77"));
+        System.out.println(writtenMultiplication("720", "7"));
+
+        System.out.println(factorial("10"));
     }
 
-    // todo - writtenDivision(longDivision)
     //  implementation for FLOAT
 
     private static String writtenAddition(String n1, String n2) {
 
         // cases handling/data preparation
-        boolean signedResult = false;
+        boolean negativeResult = false;
         BigInteger n1BI = new BigInteger(n1);
         BigInteger n2BI = new BigInteger(n2);
         String absSmaller = n1BI.min(n2BI).toString();
@@ -27,7 +28,7 @@ public class WrittenArithmetic {
         if (n1.charAt(0) == '-' && n2.charAt(0) == '-') {
             n1 = n1.substring(1);
             n2 = n2.substring(1);
-            signedResult = true;
+            negativeResult = true;
         } else if (absSmaller.charAt(0) == '-') {
             absSmaller = absSmaller.substring(1);
             return writtenSubtraction(absLarger, absSmaller);
@@ -51,7 +52,7 @@ public class WrittenArithmetic {
         }
 
         // finishing the result
-        if (signedResult) result.append("-");
+        if (negativeResult) result.append("-");
         result.reverse();
         for (int i = result.charAt(0) == '-' ? 1 : 0; i < result.length(); ) {
             if (result.charAt(i) == '0') result.deleteCharAt(i);
@@ -124,16 +125,16 @@ public class WrittenArithmetic {
         if (n1.matches("0+") || n2.matches("0+")) return "0";
 
         // cases handling/data preparation
-        boolean signed = false;
+        boolean negative = false;
         if (n1.charAt(0) == '-' && n2.charAt(0) == '-') {
             n1 = n1.substring(1);
             n2 = n2.substring(1);
         } else if (n1.charAt(0) == '-') {
             n1 = n1.substring(1);
-            signed = true;
+            negative = true;
         } else if (n2.charAt(0) == '-') {
             n2 = n2.substring(1);
-            signed = true;
+            negative = true;
         }
 
         // multiplication
@@ -145,8 +146,8 @@ public class WrittenArithmetic {
             for (int j = n2Len - 1; j >= 0; j--) {
                 int n2Digit = n2.charAt(j) - '0';
                 int currNumDecPos = i + j + 1; // curr decimal positions of the result
-                int product = n1Digit * n2Digit;
-                mplResult[currNumDecPos] += product % 10; // set the curr decimal position result
+                int product = n1Digit * n2Digit + mplResult[currNumDecPos];
+                mplResult[currNumDecPos] = product % 10; // set the curr decimal position result
                 mplResult[currNumDecPos - 1] += product / 10; // update the next carry
             }
         }
@@ -159,13 +160,21 @@ public class WrittenArithmetic {
             numSeen = true;
             result.append(n);
         }
-        if (signed) result.insert(0, "-");
+        if (negative) result.insert(0, "-");
 
         return result.toString();
     }
 
-
-    private static String writtenDivision(String dividend, String divisor) {
-
+    private static String factorial(String n) {
+        long decimalPosition = (long) Math.pow(10, n.length() - 1);
+        String factorial = "1";
+        for (char digit : n.toCharArray()) {
+            int numericDigit = digit - '0';
+            for (int i = 2; i <= decimalPosition * numericDigit; i++) {
+                factorial = writtenMultiplication(factorial, String.valueOf(i));
+            }
+            decimalPosition /= 10;
+        }
+        return factorial;
     }
 }
