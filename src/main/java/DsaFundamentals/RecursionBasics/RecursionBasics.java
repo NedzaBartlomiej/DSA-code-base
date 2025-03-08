@@ -25,13 +25,21 @@ public class RecursionBasics {
         printTheFibonacciSeriesUpToNTermsUsingRecursion(0, 1, 5);
 
         System.out.println();
-        int[] arr = {1, 2, 3, 4, 5, 6, 6345};
+        int[] arr = {1, 29889, 3, 4, 5, 697};
         printTheElementsOfAnArrayUsingRecursion(arr, arr.length - 1);
 
         System.out.println();
         System.out.println(countTheDigitsOfAGivenNumberUsingRecursion(13434, 0));
 
         System.out.println(findTheSumOfDigitsOfANumberUsingRecursion(345));
+
+        System.out.println(findTheGcdOfTwoNumbersUsingRecursion(123, 24));
+
+        System.out.println(findTheLargestElementOfAnArrayUsingRecursion(arr, arr.length - 1));
+
+        System.out.println(reverseAStringUsingRecursion("String", new StringBuilder(), "String".length() - 1).toString());
+
+        System.out.println(convertADecimalNumberToBinaryUsingRecursion(11, new StringBuilder()));
     }
 
     private static int factorial(int n) {
@@ -97,11 +105,32 @@ public class RecursionBasics {
     private static int countTheDigitsOfAGivenNumberUsingRecursion(int n, int lvl) {
         if (lvl == 0 && n == 0) return 1;
         if (n == 0) return 0;
-        return 1 + countTheDigitsOfAGivenNumberUsingRecursion(n / 10, ++lvl);
+        return 1 + countTheDigitsOfAGivenNumberUsingRecursion(n / 10, lvl + 1);
     }
 
     private static int findTheSumOfDigitsOfANumberUsingRecursion(int n) {
         if (n == 0) return 0;
         return n % 10 + findTheSumOfDigitsOfANumberUsingRecursion(n / 10);
+    }
+
+    private static int findTheGcdOfTwoNumbersUsingRecursion(int a, int b) {
+        if (b == 0) return a;
+        return findTheGcdOfTwoNumbersUsingRecursion(b, a % b);
+    }
+
+    private static int findTheLargestElementOfAnArrayUsingRecursion(int[] arr, int lastIdx) {
+        if (lastIdx < 0) return Integer.MIN_VALUE;
+        return Math.max(arr[lastIdx], findTheLargestElementOfAnArrayUsingRecursion(arr, lastIdx - 1));
+    }
+
+    private static StringBuilder reverseAStringUsingRecursion(String s, StringBuilder sb, int lastIdx) {
+        if (lastIdx < 0) return sb;
+        sb.append(s.charAt(lastIdx));
+        return reverseAStringUsingRecursion(s, sb, lastIdx - 1);
+    }
+
+    private static StringBuilder convertADecimalNumberToBinaryUsingRecursion(int n, StringBuilder sb) {
+        if (n == 0) return sb;
+        return convertADecimalNumberToBinaryUsingRecursion(n / 2, sb.insert(0, n % 2));
     }
 }
