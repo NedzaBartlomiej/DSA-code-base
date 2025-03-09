@@ -40,6 +40,15 @@ public class RecursionBasics {
         System.out.println(reverseAStringUsingRecursion("String", new StringBuilder(), "String".length() - 1).toString());
 
         System.out.println(convertADecimalNumberToBinaryUsingRecursion(11, new StringBuilder()));
+
+        System.out.println(isPrime(7, 2));
+
+        printEvenNumbersInAGivenRangeUsingRecursion(-1, 7);
+
+        System.out.println();
+        System.out.println(isPalindrome("vabav", 0, "vabav".length() - 1));
+
+        System.out.println(isSorted(new int[]{1, 2, 3}, 0));
     }
 
     private static int factorial(int n) {
@@ -132,5 +141,32 @@ public class RecursionBasics {
     private static StringBuilder convertADecimalNumberToBinaryUsingRecursion(int n, StringBuilder sb) {
         if (n == 0) return sb;
         return convertADecimalNumberToBinaryUsingRecursion(n / 2, sb.insert(0, n % 2));
+    }
+
+    private static boolean isPrime(int n, int i) {
+        if (n <= 1) return false;
+        if (i * i > n) return true;
+        if (n % i == 0) return false;
+        return isPrime(n, i + 1);
+    }
+
+    private static void printEvenNumbersInAGivenRangeUsingRecursion(int start, int end) {
+        if (start > end) return;
+        if (start % 2 != 0) start++;
+        System.out.print(start + ";");
+        printEvenNumbersInAGivenRangeUsingRecursion(start + 2, end);
+    }
+
+    private static boolean isPalindrome(String s, int start, int end) {
+        if (start == end) return true;
+        if (s.charAt(start) != s.charAt(end)) return false;
+        else return isPalindrome(s, start + 1, end - 1);
+    }
+
+    private static boolean isSorted(int[] arr, int i) {
+        if (arr.length <= 1) return true;
+        if (i >= arr.length - 1) return true;
+        if (arr[i] > arr[i + 1]) return false;
+        return isSorted(arr, i + 1);
     }
 }
