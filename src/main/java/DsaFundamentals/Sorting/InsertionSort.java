@@ -19,5 +19,56 @@ public class InsertionSort {
         }
 
         System.out.println(Arrays.toString(arr));
+
+
+        System.out.println("SingleLinkedList insertion sort:");
+        ListNode listNode = new ListNode(2, new ListNode(1));
+        ListNode sortedListNode = insertionSortList(listNode);
+        System.out.println(sortedListNode.val + " " + sortedListNode.next.val);
+    }
+
+    // InsertionSort on SingleLinkedList
+
+
+    public static class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode() {
+        }
+
+        ListNode(int val) {
+            this.val = val;
+        }
+
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+    private static ListNode insertionSortList(ListNode head) {
+        ListNode sorted = new ListNode(0);
+        ListNode curr = head;
+
+        while (curr != null) {
+
+            // searching for the new node place
+            ListNode sortedIterator = sorted.next;
+            ListNode prevSortedIterator = sorted;
+            while (sortedIterator != null && sortedIterator.val < curr.val) {
+                prevSortedIterator = sortedIterator;
+                sortedIterator = sortedIterator.next;
+            }
+
+            ListNode currNextSave = curr.next;
+
+            // insertion
+            prevSortedIterator.next = curr;
+            curr.next = sortedIterator;
+
+            curr = currNextSave;
+        }
+        return sorted.next;
     }
 }
