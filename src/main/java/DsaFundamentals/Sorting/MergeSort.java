@@ -6,10 +6,10 @@ public class MergeSort {
     private static int[] merged;
 
     public static void main(String[] args) {
-        int[] arr = {4, 3, 1, 2};
+        int[] arr = {3, 5, 435, 3, 1, 234, 45, 788, 7, 4, 324, 2, 9, 10};
         merged = new int[arr.length];
         System.out.println(Arrays.toString(arr));
-        mergeSort(arr, 0, arr.length - 1);
+        iterativeMergeSort(arr);
         System.out.println(Arrays.toString(arr));
     }
 
@@ -34,7 +34,37 @@ public class MergeSort {
         while (i <= mid) arr[curr++] = merged[i++];
     }
 
-    private static void iteratedMergeSort(int[] arr) {
-        // todo 3/16/2025!
+    private static void iterativeMergeSort(int[] arr) {
+        for (int mergeSize = 1; mergeSize < arr.length; mergeSize *= 2) {
+            // sub-arrays merging
+            for (int l = 0; l < arr.length - 1; l += 2 * mergeSize) {
+                int mid = l + mergeSize - 1;
+                int r = Math.min(l + (mergeSize * 2) - 1, arr.length - 1);
+                merge(arr, l, mid, r);
+            }
+        }
+    }
+
+    private static void merge(int[] arr, int l, int mid, int r) {
+        int i = l;
+        int j = mid + 1;
+        int[] mergeArr = new int[r - l + 1];
+        int iterator = 0;
+
+        // merging
+        while (i <= mid && j <= r) {
+            if (arr[i] <= arr[j]) {
+                mergeArr[iterator] = arr[i++];
+            } else {
+                mergeArr[iterator] = arr[j++];
+            }
+            iterator++;
+        }
+        // remaining elms
+        while (i <= mid) mergeArr[iterator++] = arr[i++];
+        while (j <= r) mergeArr[iterator++] = arr[j++];
+
+        // updating the main array
+        System.arraycopy(mergeArr, 0, arr, l, mergeArr.length);
     }
 }
