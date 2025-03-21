@@ -41,7 +41,7 @@ public class MergeSort {
         for (int mergeSize = 1; mergeSize < arr.length; mergeSize *= 2) {
             // sub-arrays merging
             for (int l = 0; l < arr.length - 1; l += 2 * mergeSize) {
-                int mid = l + mergeSize - 1;
+                int mid = Math.min(l + mergeSize - 1, arr.length - 1);
                 int r = Math.min(l + (mergeSize * 2) - 1, arr.length - 1);
                 inversionCounter += merge(arr, l, mid, r);
             }
